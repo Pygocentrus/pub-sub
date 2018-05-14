@@ -1,0 +1,16 @@
+{
+  "name": "pub-sub",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "node_modules/.bin/ava -v"
+  },
+  "dependencies": {
+    "crc": "^3.5.0"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "sinon": "^5.0.7"
+  }
+}

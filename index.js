@@ -6,7 +6,8 @@ class PubSub {
   }
 
   publish(event, ...payload) {
-    if (!event || !this.listeners[event]) return;
+    if (!event) throw new Error('No event given');
+    if (!this.listeners[event]) return;
     this.listeners[event].forEach(listener => listener.handler.call(this, ...payload));
   }
 

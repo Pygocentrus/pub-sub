@@ -1,5 +1,7 @@
 # Pub-sub
 
+[![Build Status](https://travis-ci.org/Pygocentrus/pub-sub.svg?branch=master)](https://travis-ci.org/Pygocentrus/pub-sub/jobs/379801952)
+
 Dependency-free ES6+ Pub-Sub library.
 
 ## Basic usage

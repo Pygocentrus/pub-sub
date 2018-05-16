@@ -1,11 +1,8 @@
 import test from 'ava';
 import sinon from 'sinon';
-
 import pubSub from '..';
-import crcEncode from '../lib/crc';
 
 const noop = () => ({});
-const getListener = callback => ({ token: crcEncode(callback.toString()), handler: callback });
 
 test.beforeEach(() => {
   pubSub.unsubscribeAll();
@@ -36,20 +33,6 @@ test('should not fire other event listeners', t => {
 	t.true(spy.notCalled);
 });
 
-test('should store unique listeners per event', t => {
-  const event = 'foo';
-  const expectedListener = getListener(noop);
-  pubSub.subscribe(event, noop);
-  t.deepEqual(pubSub.listeners, { [event]: [expectedListener] });
-});
-
-test('should not store same listeners twice', t => {
-  const event = 'foo';
-  pubSub.subscribe(event, noop);
-  pubSub.subscribe(event, noop);
-  t.is(pubSub.listeners[event].length, 1);
-});
-
 test('should throw an error when we publish garbage', t => {
   t.throws(() => pubSub.publish(undefined));
   t.throws(() => pubSub.publish(null));
@@ -64,13 +47,11 @@ test('should throw an error when we subscribe to garbage', t => {
 
 test('should be able to unsubscribe an event', t => {
   const event = 'foo';
-  const expectedListener = getListener(noop);
   const token = pubSub.subscribe(event, noop);
 
   t.is(Object.keys(pubSub.listeners).length, 1);
-  t.deepEqual(pubSub.listeners[event], [expectedListener]);
 
-  pubSub.unsubscribe(event, token);
+  pubSub.unsubscribe(token);
 
   t.is(Object.keys(pubSub.listeners).length, 0);
   t.deepEqual(pubSub.listeners[event], undefined);

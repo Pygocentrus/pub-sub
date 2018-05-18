@@ -1,6 +1,7 @@
 # Pub-sub
 
 [![Build Status](https://travis-ci.org/Pygocentrus/pub-sub.svg?branch=master)](https://travis-ci.org/Pygocentrus/pub-sub/jobs/379801952)
+![license](https://img.shields.io/github/license/Pygocentrus/pub-sub.svg)
 
 Dependency-free ES6+ Pub-Sub library.
 
@@ -26,7 +27,7 @@ pubSub.publish('foo', { bar: 'baz' });
 
 **Signature**: `string`, [...`any`] => `void`
 
-This function takes a token and unscubscribes the underlying listener.
+This function takes a token and unsubscribes the underlying listener.
 
 ```javascript
 pubSub.publish('foo');
@@ -42,7 +43,7 @@ pubSub.publish('args', 1, 2, 3);
 This function creates a listener for an event/thread given a callback, and sends back a token that may be used to unsubscribe later.
 
 ```javascript
-// If you need to unscubscribe later, store the token
+// If you need to unsubscribe later, store the token
 const token = pubSub.subscribe('event', handler);
 
 // Otherwise, the syntax is simpler
@@ -53,7 +54,7 @@ pubSub.subscribe('phone:call', hangUp);
 
 **Signature**: `string` => `void`
 
-This function takes a token and unscubscribes the underlying listener.
+This function takes a token and unsubscribes the underlying listener.
 
 ```javascript
 pubSub.unsubscribe(token);
@@ -61,10 +62,15 @@ pubSub.unsubscribe(token);
 
 ### unsubscribeAll
 
-**Signature**: `void` => `void`
+**Signature**: `void` | `string` | `regex` => `void`
 
 This function unsubscribes every listeners.
 
 ```javascript
+// Unsubscribes all listeners of a matching thread
 pubSub.unsubscribeAll('foo');
+pubSub.unsubscribeAll(/foo:.*/);
+
+// Unsubscribe all events
+pubSub.unsubscribeAll();
 ```

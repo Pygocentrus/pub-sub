@@ -20,8 +20,6 @@ class PubSub {
   }
 
   unsubscribe(token) {
-    if (!token) return;
-
     Object.keys(this.listeners).forEach((event) => {
       const eventListeners = this.listeners[event];
       if (eventListeners && eventListeners.length) {
@@ -36,8 +34,20 @@ class PubSub {
     });
   }
 
-  unsubscribeAll() {
-    this.listeners = {};
+  unsubscribeAll(pattern) {
+    if (!pattern) {
+      this.listeners = {};
+    }
+
+    if (pattern instanceof RegExp) {
+      Object.keys(this.listeners).forEach((event) => {
+        if (event.match(pattern)) {
+          delete this.listeners[event];
+        }
+      });
+    } else if (typeof pattern === 'string' && this.listeners[pattern]) {
+      delete this.listeners[pattern];
+    }
   }
 }
 

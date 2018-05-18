@@ -45,7 +45,7 @@ test('should throw an error when we subscribe to garbage', t => {
   t.throws(() => pubSub.subscribe());
 });
 
-test('should be able to unsubscribe an event', t => {
+test('should be able to unsubscribe a single event from token', t => {
   const event = 'foo';
   const token = pubSub.subscribe(event, noop);
 
@@ -55,4 +55,52 @@ test('should be able to unsubscribe an event', t => {
 
   t.is(Object.keys(pubSub.listeners).length, 0);
   t.deepEqual(pubSub.listeners[event], undefined);
+});
+
+test('should be able to unsubscribe given a string pattern', t => {
+  pubSub.subscribe('foo', () => { console.log('foo 1'); });
+  pubSub.subscribe('foo', () => { console.log('foo 2'); });
+  pubSub.subscribe('bar', noop);
+
+  t.is(pubSub.listeners['foo'].length, 2);
+  t.is(pubSub.listeners['bar'].length, 1);
+
+  pubSub.unsubscribeAll('foo');
+
+  t.is(pubSub.listeners['foo'], undefined);
+  t.is(pubSub.listeners['bar'].length, 1);
+});
+
+test('should be able to unsubscribe given a regex pattern', t => {
+  pubSub.subscribe('foo:match_1', () => { console.log('foo 1'); });
+  pubSub.subscribe('foo:match_2', () => { console.log('foo 2'); });
+  pubSub.subscribe('faa:not_matched', noop);
+
+  t.is(pubSub.listeners['foo:match_1'].length, 1);
+  t.is(pubSub.listeners['foo:match_2'].length, 1);
+  t.is(pubSub.listeners['faa:not_matched'].length, 1);
+
+  pubSub.unsubscribeAll(/foo:/);
+
+  t.is(pubSub.listeners['foo:match_1'], undefined);
+  t.is(pubSub.listeners['foo:match_2'], undefined);
+  t.is(pubSub.listeners['faa:not_matched'].length, 1);
+});
+
+test('should be able to unsubscribe all events', t => {
+  pubSub.subscribe('foo', noop);
+  pubSub.subscribe('bar', noop);
+  pubSub.subscribe('baz', noop);
+
+  t.is(Object.keys(pubSub.listeners).length, 3);
+  t.is(pubSub.listeners['foo'].length, 1);
+  t.is(pubSub.listeners['bar'].length, 1);
+  t.is(pubSub.listeners['baz'].length, 1);
+
+  pubSub.unsubscribeAll();
+
+  t.is(Object.keys(pubSub.listeners).length, 0);
+  t.is(pubSub.listeners['foo'], undefined);
+  t.is(pubSub.listeners['bar'], undefined);
+  t.is(pubSub.listeners['baz'], undefined);
 });

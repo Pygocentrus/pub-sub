@@ -1,8 +1,21 @@
 {
-  "name": "pub-sub",
+  "name": "pub-sub.js",
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",
+  "author": "Pierre Guilhou <pierre.guilhou.pro@gmail.com>",
+  "description": "Dependency-free, dead-simple pub-sub library written in ES6+",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pygocentrus/pub-sub"
+  },
+  "keywords": [
+    "pub sub",
+    "pubsub",
+    "publish",
+    "subscribe",
+    "events"
+  ],
   "scripts": {
     "test": "node_modules/.bin/ava -v"
   },
